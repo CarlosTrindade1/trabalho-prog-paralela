@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 
     Graph *graph = new Graph(file_name_graph);
 
-    graph->print();
+    // graph->print();
 
     return 0;
 }

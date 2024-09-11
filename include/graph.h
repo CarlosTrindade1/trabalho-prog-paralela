@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cstring>
 #include <stdlib.h>
+#include <map>
+
+using namespace std;
 
 struct Edge {
     int id;
@@ -22,5 +25,6 @@ class Graph {
         int num_vertices;
         Vertex* vertices;
 
+        map<int, int> rename_vertices(char* file_name_graph);
         void read_graph(char* file_name_graph);
 };

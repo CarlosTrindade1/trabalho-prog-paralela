@@ -2,6 +2,33 @@
 
 using namespace std;
 
+map<int, int> Graph::rename_vertices(char* filename_graph) {
+    ifstream file(filename_graph);
+    map<int, int> new_ids;
+
+    if (file.is_open()) {
+        string line;
+        int counter = 0;
+
+        while (getline(file, line)) {
+            int vertex_id = atoi(strtok((char *)line.c_str(), " "));
+            
+            new_ids[vertex_id] = 1;
+        }
+
+        for (const auto pair : new_ids) {
+            new_ids[pair.first] = counter;
+            counter++;
+        }
+
+        file.close();
+
+        return new_ids;
+    } else {
+        cout << "Não foi possível abrir o arquivo" << endl;
+    }
+}
+
 void Graph::read_graph(char* file_name_graph) {
     ifstream file(file_name_graph);
     if (file.is_open()) {
@@ -53,7 +80,8 @@ void Graph::read_graph(char* file_name_graph) {
 }
 
 Graph::Graph(char *file_name) {
-    read_graph(file_name);
+    rename_vertices(file_name);
+    // read_graph(file_name);
     cout << "Graph created" << endl;
 }
 
