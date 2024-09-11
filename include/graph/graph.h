@@ -19,6 +19,7 @@ struct Vertex {
 class Graph {
     public:
         Graph(char *file_name);
+        int count_clicks();
         void print();
 
     private:
