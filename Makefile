@@ -9,4 +9,4 @@ compile:
 	${CC} -Iinclude graph.cpp main.cpp -o main
 
 run:
-	./main ./graphs/graph.txt 0
+	./main ./datasets/citeseer.edgelist 0
