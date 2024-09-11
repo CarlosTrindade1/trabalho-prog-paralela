@@ -26,5 +26,5 @@ class Graph {
         Vertex* vertices;
 
         map<int, int> rename_vertices(char* file_name_graph);
-        void read_graph(char* file_name_graph);
+        void read_graph(char* file_name_graph, map<int, int> new_ids);
 };

@@ -26,63 +26,59 @@ map<int, int> Graph::rename_vertices(char* filename_graph) {
         return new_ids;
     } else {
         cout << "Não foi possível abrir o arquivo" << endl;
+        return map<int, int>();
     }
 }
 
-void Graph::read_graph(char* file_name_graph) {
+void Graph::read_graph(char* file_name_graph, map<int, int> new_ids) {
     ifstream file(file_name_graph);
+
     if (file.is_open()) {
         string line;
-        int counter = 0;
+
         while (getline(file, line)) {
-            if (counter == 0) {
-                num_vertices = atoi(line.c_str());
-                if (num_vertices <= 0) {
-                    cout << "Invalid number of vertices" << endl;
-                    return;
+            int vertex_id = atoi(strtok((char *)line.c_str(), " "));
+            int vertex_id_new = new_ids[vertex_id];
+
+            int edge_id = atoi(strtok(NULL, " "));
+            int edge_id_new = new_ids[edge_id];
+
+            if (vertices[vertex_id_new].edges != NULL) {
+                Edge *edge = vertices[vertex_id_new].edges;
+                while (edge->next != NULL) {
+                    edge = edge->next;
                 }
-                vertices = (Vertex *)malloc(num_vertices * sizeof(Vertex));
-            } else if (counter > 0 && counter <= num_vertices) {
-                vertices[counter - 1].id = atoi(line.c_str());
-                vertices[counter - 1].edges = NULL;
+                edge->next = new Edge{edge_id_new, NULL};
             } else {
-                int vertex_id = atoi(strtok((char *)line.c_str(), " "));
-                
-                for (int i = 0; i < num_vertices; i++) {
-                    if (vertices[i].id == vertex_id) {
-                        if (vertices[i].edges != NULL) {
-                            Edge *edge = vertices[i].edges;
-
-                            while (edge->next != NULL)
-                                edge = edge->next;
-                            
-                            Edge *new_edge = (Edge *)malloc(sizeof(Edge));
-                            new_edge->id = atoi(strtok(NULL, " "));
-                            new_edge->next = NULL;
-                            edge->next = new_edge;
-                            continue;
-                        }
-
-                        Edge *edge = (Edge *)malloc(sizeof(Edge));
-                        edge->id = atoi(strtok(NULL, " "));
-                        edge->next = NULL;
-                        vertices[i].edges = edge;
-                    }
-                }
+                vertices[vertex_id_new].edges = new Edge{edge_id_new, NULL};
             }
-            counter++;
         }
+
         file.close();
-    }
-    else {
-        cout << "Unable to open file" << endl;
+    } else {
+        cout << "Não foi possível abrir o arquivo" << endl;
     }
 }
 
 Graph::Graph(char *file_name) {
-    rename_vertices(file_name);
-    // read_graph(file_name);
-    cout << "Graph created" << endl;
+    map<int, int> new_ids = rename_vertices(file_name);
+
+    if (new_ids.empty()) {
+        cout << "Não foi possível criar o grafo" << endl;
+        return;
+    }
+
+    vertices = new Vertex[new_ids.size()];
+    num_vertices = new_ids.size();
+
+    for (const auto pair : new_ids) {
+        vertices[pair.second].id = pair.second;
+        vertices[pair.second].edges = NULL;
+    }
+    
+    read_graph(file_name, new_ids);
+
+    cout << "Graph criado" << endl;
 }
 
 void Graph::print() {
