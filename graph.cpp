@@ -12,8 +12,10 @@ map<int, int> Graph::rename_vertices(char* filename_graph) {
 
         while (getline(file, line)) {
             int vertex_id = atoi(strtok((char *)line.c_str(), " "));
+            int edge_id = atoi(strtok(NULL, " "));
             
             new_ids[vertex_id] = 1;
+            new_ids[edge_id] = 1;
         }
 
         for (const auto pair : new_ids) {
