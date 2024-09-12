@@ -3,6 +3,7 @@
 #include <cstring>
 #include <stdlib.h>
 #include <map>
+#include <vector>
 
 using namespace std;
 
@@ -19,7 +20,7 @@ struct Vertex {
 class Graph {
     public:
         Graph(char *file_name);
-        int count_clicks();
+        int count_clicks(int k);
         void print();
 
     private:
@@ -28,4 +29,6 @@ class Graph {
 
         map<int, int> rename_vertices(char* file_name_graph);
         void read_graph(char* file_name_graph, map<int, int> new_ids);
+        bool is_on_click(vector<int> click, int vertex);
+        bool makes_a_click(vector<int> click, int vertex);
 };

@@ -8,7 +8,9 @@ int main(int argc, char* argv[]) {
 
     Graph *graph = new Graph(file_name_graph);
 
-    graph->print();
+    int resultado = graph->count_clicks(size_of_click);
+
+    cout << "RESULTADO: " << resultado << endl;
 
     return 0;
 }

@@ -22,4 +22,4 @@ compile:
 	${CC} ${INCLUDE_FLAGS} ${SOURCE_FILES} -o ${OUTPUT}
 
 run:
-	./main ./datasets/citeseer.edgelist 0
+	./main ./datasets/citeseer.edgelist 3
