@@ -1,5 +1,25 @@
 #include <graph.h>
 
+void print_clicks(vector<vector<int>> clicks) {
+    for (int i = 0; i < clicks.size(); i++) {
+        cout << "[";
+        for (int j = 0; j < clicks[i].size(); j++) {
+            cout << clicks[i][j] << ", ";
+        }
+        cout << "]";
+        cout << endl;
+    }    
+}
+
+void print_click(vector<int> click) {
+    cout << "[";
+    for (int i = 0; i < click.size(); i++) {
+        cout << click[i] << ", ";
+    }
+    cout << "]";
+    cout << endl;
+}
+
 int Graph::count_clicks(int k) {
     vector<vector<int>> clicks(num_vertices, vector<int>(1));
     int counter = 0;
@@ -32,16 +52,10 @@ int Graph::count_clicks(int k) {
                     makes_a_click(click, neighbor->id) &&
                     neighbor->id > last_vertex
                 ) {
-                    vector<int> new_click = click;
-                    new_click.push_back(neighbor->id);
-                    clicks.push_back(new_click);
-
-                    for (int i = 0; i < clicks[clicks.size()].size(); i++) {
-                        cout << clicks[clicks.size()][i] << " ";
-                    }
-                    cout << endl;
+                    vector<int> *new_click = new vector<int>(click);
+                    new_click->push_back(neighbor->id);
+                    clicks.push_back(*new_click);
                 }
-
                 neighbor = neighbor->next;
             }
         }
@@ -61,23 +75,34 @@ bool Graph::is_on_click(vector<int> click, int vertex) {
 }
 
 bool Graph::makes_a_click(vector<int> click, int vertex) {
-    Edge* edge = vertices[vertex].edges;
-
     for (int i = 0; i < click.size(); i++) {
-        bool found = false;
-
-        while (edge) {
-            if (!found && edge->id == click[i]) {
-                found = true;
-            }
-
-            edge = edge->next;
-        }
-
-        if (!found) {
+        if (!is_neighbor(click[i], vertex))
             return false;
-        }
     }
 
     return true;
+}
+
+bool Graph::is_neighbor(int vertex_1, int vertex_2) {
+    Vertex v1 = vertices[vertex_1];
+    Edge *neighbor_1 = v1.edges;
+
+    while (neighbor_1) {
+        if (neighbor_1->id == vertex_2)
+            return true;
+        
+        neighbor_1 = neighbor_1->next;
+    }
+
+    Vertex v2 = vertices[vertex_2];
+    Edge *neighbor_2 = v2.edges;
+
+    while (neighbor_2) {
+        if (neighbor_2->id == vertex_1)
+            return true;
+
+        neighbor_2 = neighbor_2->next;
+    }
+
+    return false;
 }

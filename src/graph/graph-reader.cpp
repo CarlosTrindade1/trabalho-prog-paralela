@@ -79,8 +79,6 @@ Graph::Graph(char *file_name) {
     }
     
     read_graph(file_name, new_ids);
-
-    cout << "Graph criado" << endl;
 }
 
 void Graph::print() {

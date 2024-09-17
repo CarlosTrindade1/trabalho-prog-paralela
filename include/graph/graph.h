@@ -22,6 +22,7 @@ class Graph {
         Graph(char *file_name);
         int count_clicks(int k);
         void print();
+        bool is_neighbor(int vertex_1, int vertex_2);
 
     private:
         int num_vertices;
