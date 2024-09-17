@@ -45,6 +45,7 @@ void Graph::read_graph(char* file_name_graph, map<int, int> new_ids) {
             int edge_id = atoi(strtok(NULL, " "));
             int edge_id_new = new_ids[edge_id];
 
+            // Add a edge to the vertex
             if (vertices[vertex_id_new].edges != NULL) {
                 Edge *edge = vertices[vertex_id_new].edges;
                 while (edge->next != NULL) {
@@ -53,6 +54,17 @@ void Graph::read_graph(char* file_name_graph, map<int, int> new_ids) {
                 edge->next = new Edge{edge_id_new, NULL};
             } else {
                 vertices[vertex_id_new].edges = new Edge{edge_id_new, NULL};
+            }
+
+            // Add a vertex to the edge's vertex
+            if (vertices[edge_id_new].edges != NULL) {
+                Edge *edge = vertices[edge_id_new].edges;
+                while (edge->next != NULL) {
+                    edge = edge->next;
+                }
+                edge->next = new Edge{vertex_id_new, NULL};
+            } else {
+                vertices[edge_id_new].edges = new Edge{vertex_id_new, NULL};
             }
         }
 
