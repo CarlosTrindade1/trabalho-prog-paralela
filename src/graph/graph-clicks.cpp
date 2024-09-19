@@ -1,14 +1,7 @@
 #include <graph.h>
 
-int Graph::count_clicks(int k) {
-    vector<vector<int>> clicks(num_vertices, vector<int>(1));
+int Graph::count_clicks(vector<vector<int>> clicks, int k) {
     int counter = 0;
-    
-    // Add all vertices to the clicksj array
-    for (int i = 0; i < num_vertices; i++) {
-        clicks[i].pop_back();
-        clicks[i].push_back(vertices[i].id);
-    }
 
     while (clicks.size()) {
         vector<int> click = clicks.back();
@@ -44,6 +37,21 @@ int Graph::count_clicks(int k) {
             }
         }
     }
+
+    return counter;
+}
+
+int Graph::count_clicks_serial(int k) {
+    vector<vector<int>> clicks(num_vertices, vector<int>(1));
+    int counter = 0;
+    
+    // Add all vertices to the clicksj array
+    for (int i = 0; i < num_vertices; i++) {
+        clicks[i].pop_back();
+        clicks[i].push_back(vertices[i].id);
+    }
+
+    counter = count_clicks(clicks, k);
 
     return counter;
 }

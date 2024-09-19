@@ -20,9 +20,8 @@ struct Vertex {
 class Graph {
     public:
         Graph(char *file_name);
-        int count_clicks(int k);
+        int count_clicks_serial(int k);
         void print();
-        bool is_neighbor(int vertex_1, int vertex_2);
 
     private:
         int num_vertices;
@@ -32,4 +31,6 @@ class Graph {
         void read_graph(char* file_name_graph, map<int, int> new_ids);
         bool is_on_click(vector<int> click, int vertex);
         bool makes_a_click(vector<int> click, int vertex);
+        int count_clicks(vector<vector<int>> clicks, int k);
+        bool is_neighbor(int vertex_1, int vertex_2);
 };
