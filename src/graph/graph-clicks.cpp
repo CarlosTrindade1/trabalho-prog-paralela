@@ -52,7 +52,7 @@ int Graph::count_clicks(vector<vector<int>> clicks, int k) {
 
 void* Graph::count_clicks_entry(void *args) {
     thread_args *thread_args = static_cast<struct thread_args *>(args);
-    int counter = thread_args->graph->count_clicks(*thread_args->clicks, thread_args->k);
+    int counter = thread_args->graph->count_clicks(thread_args->clicks, thread_args->k);
     thread_args->counter = counter;
     pthread_exit(NULL);
     return NULL;
@@ -95,7 +95,7 @@ int Graph::count_clicks_parallel(int k, int num_threads) {
         if (end > num_vertices)
             end = num_vertices;
 
-        vector<vector<int>> *clicks_thread = new vector<vector<int>>(clicks.begin() + start, clicks.begin() + end);
+        vector<vector<int>> clicks_thread = vector<vector<int>>(clicks.begin() + start, clicks.begin() + end);
 
         args[i].clicks = clicks_thread;
         args[i].k = k;
@@ -109,6 +109,9 @@ int Graph::count_clicks_parallel(int k, int num_threads) {
         pthread_join(threads[i], NULL);
         counter += args[i].counter;
     }
+
+    delete[] threads;
+    delete[] args;
 
     return counter;
 }

@@ -28,7 +28,7 @@ class Graph {
         };
         struct thread_args {
             Graph *graph;
-            vector<vector<int>> *clicks;
+            vector<vector<int>> clicks;
             int k;
             int counter;
         };
