@@ -37,10 +37,10 @@ int Graph::count_clicks(vector<vector<int>> clicks, int k) {
                     neighbor->id > last_vertex &&
                     !is_on_click(already_vertices, neighbor->id)
                 ) {
-                    vector<int> *new_click = new vector<int>(click);
-                    new_click->push_back(neighbor->id);
+                    vector<int> new_click = vector<int>(click);
+                    new_click.push_back(neighbor->id);
                     already_vertices.push_back(neighbor->id);
-                    clicks.push_back(*new_click);
+                    clicks.push_back(new_click);
                 }
                 neighbor = neighbor->next;
             }
