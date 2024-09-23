@@ -93,6 +93,19 @@ Graph::Graph(char *file_name) {
     read_graph(file_name, new_ids);
 }
 
+Graph::~Graph() {
+    for (int i = 0; i < num_vertices; i++) {
+        Edge *edge = vertices[i].edges;
+        while (edge != NULL) {
+            Edge *next = edge->next;
+            delete edge;
+            edge = next;
+        }
+    }
+
+    delete[] vertices;
+}
+
 void Graph::print() {
     for (int i = 0; i < num_vertices; i++) {
         cout << vertices[i].id << " -> ";

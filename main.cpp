@@ -8,7 +8,9 @@ int main(int argc, char* argv[]) {
 
     Graph *graph = new Graph(file_name_graph);
 
-    cout << graph->count_clicks_serial(size_of_click) << endl;
+    cout << graph->count_clicks_parallel(size_of_click, 8) << endl;
+
+    delete graph;
 
     return 0;
 }

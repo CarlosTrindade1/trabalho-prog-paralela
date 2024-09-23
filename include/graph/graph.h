@@ -11,6 +11,7 @@ using namespace std;
 class Graph {
     public:
         Graph(char *file_name);
+        ~Graph();
         int count_clicks_serial(int k);
         int count_clicks_parallel(int k, int num_threads);
         void print();
