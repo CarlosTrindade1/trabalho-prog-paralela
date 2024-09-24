@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 
     Graph *graph = new Graph(file_name_graph);
 
-    cout << graph->count_clicks_parallel(size_of_click, 8) << endl;
+    cout << graph->count_clicks_parallel(size_of_click, 4) << endl;
 
     delete graph;
 

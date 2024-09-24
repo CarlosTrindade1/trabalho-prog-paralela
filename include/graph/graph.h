@@ -14,6 +14,7 @@ class Graph {
         ~Graph();
         int count_clicks_serial(int k);
         int count_clicks_parallel(int k, int num_threads);
+        int count_clicks_divide_parallel(int k, int num_threads);
         void print();
 
     private:
@@ -26,6 +27,7 @@ class Graph {
             int id;
             Edge* edges;
         };
+
         struct thread_args {
             Graph *graph;
             vector<vector<int>> clicks;
@@ -33,13 +35,30 @@ class Graph {
             int counter;
         };
 
+        struct shared_clicks {
+            int thread_id;
+            vector<vector<int>> clicks;
+        };
+
+        struct count_clicks_args {
+            vector<vector<int>> clicks;
+            shared_clicks *shared_c;
+            bool is_divided;
+            int k;
+        };
+
+
         int num_vertices;
         Vertex* vertices;
 
-        static void* count_clicks_entry(void *args);
-        int count_clicks(vector<vector<int>> clicks, int k);
+        static void* count_clicks_parallel_entry(void *args);
+        static void* count_clicks_divide_parallel_entry(void *args);
+
+        int count_clicks(count_clicks_args args);
+
         map<int, int> rename_vertices(char* file_name_graph);
         void read_graph(char* file_name_graph, map<int, int> new_ids);
+
         bool is_on_click(vector<int> click, int vertex);
         bool makes_a_click(vector<int> click, int vertex);
         bool is_neighbor(int vertex_1, int vertex_2);

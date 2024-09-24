@@ -1,11 +1,24 @@
-#include "graph.h"
+#include <graph.h>
+#include <mutex>
 
-int Graph::count_clicks(vector<vector<int>> clicks, int k) {
+int Graph::count_clicks(count_clicks_args args) {
     int counter = 0;
+    mutex mtx;
 
-    while (clicks.size()) {
-        vector<int> click = clicks.back();
-        clicks.pop_back();
+    vector<vector<int>> *clicks;
+    int k = args.k;
+
+    if (args.is_divided) {
+        clicks = &args.shared_c->clicks;
+    } else {
+        clicks = &args.clicks;
+    }
+
+    while (clicks->size()) {
+        vector<vector<int>> new_clicks;
+
+        vector<int> click = clicks->back();
+        clicks->pop_back();
 
         vector<int> already_vertices;
 
@@ -31,10 +44,26 @@ int Graph::count_clicks(vector<vector<int>> clicks, int k) {
                     vector<int> new_click = vector<int>(click);
                     new_click.push_back(neighbor->id);
                     already_vertices.push_back(neighbor->id);
-                    clicks.push_back(new_click);
+                    new_clicks.push_back(new_click);
                 }
                 neighbor = neighbor->next;
             }
+        }
+
+        if (args.is_divided) {
+            mtx.lock();
+            for (int i = 0; i < new_clicks.size(); i++) {
+                args.shared_c->clicks.push_back(new_clicks[i]);
+            }
+            mtx.unlock();
+        } else {
+            for (int i = 0; i < new_clicks.size(); i++) {
+                clicks->push_back(new_clicks[i]);
+            }
+        }
+
+        if (clicks->size() == 0) {
+            // TODO: Implement a way to take other clicks from the shared_clicks
         }
     }
 
@@ -50,7 +79,17 @@ int Graph::count_clicks_serial(int k) {
         clicks[i].push_back(vertices[i].id);
     }
 
-    int counter = count_clicks(clicks, k);
+    count_clicks_args clicks_args = {
+        clicks,
+        new shared_clicks {
+            -1,
+            vector<vector<int>>(0)
+        },
+        false,
+        k
+    };
+
+    int counter = count_clicks(clicks_args);
 
     return counter;
 }

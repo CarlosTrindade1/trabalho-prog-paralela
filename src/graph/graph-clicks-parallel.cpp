@@ -1,18 +1,23 @@
 #include <graph.h>
 
-void print_clicks(vector<vector<int>> clicks) {
-    for (int i = 0; i < clicks.size(); i++) {
-        for (int j = 0; j < clicks[i].size(); j++) {
-            cout << clicks[i][j] << " ";
-        }
-        cout << endl;
-    }
-}
-
-void* Graph::count_clicks_entry(void *args) {
+void* Graph::count_clicks_parallel_entry(void *args) {
     thread_args *thread_args = static_cast<struct thread_args *>(args);
-    int counter = thread_args->graph->count_clicks(thread_args->clicks, thread_args->k);
+
+    count_clicks_args args_count_clicks = {
+        thread_args->clicks,
+        new shared_clicks {
+            -1,
+            vector<vector<int>>(0)
+        },
+        false,
+        thread_args->k
+    };
+
+    int counter = thread_args->graph->count_clicks(args_count_clicks);
     thread_args->counter = counter;
+
+    delete args_count_clicks.shared_c;
+
     pthread_exit(NULL);
     return NULL;
 }
@@ -47,7 +52,7 @@ int Graph::count_clicks_parallel(int k, int num_threads) {
         args[i].counter = 0;
         args[i].graph = this;
 
-        pthread_create(&threads[i], NULL, count_clicks_entry, (void *) &args[i]);
+        pthread_create(&threads[i], NULL, count_clicks_parallel_entry, (void *) &args[i]);
     }
 
     for (int i = 0; i < num_threads; i++) {

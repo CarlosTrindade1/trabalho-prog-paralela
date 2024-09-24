@@ -1,4 +1,4 @@
-#include "graph.h"
+#include <graph.h>
 
 bool Graph::is_on_click(vector<int> click, int vertex) {
     for (int i = 0; i < click.size(); i++) {
