@@ -52,10 +52,12 @@ int Graph::count_clicks_divide_parallel(int k, int num_threads) {
         pthread_create(&threads[i], NULL, count_clicks_divide_parallel_entry, (void *) &args[i]);
     }
 
-    delete[] shared_c;
-    delete[] threads;
+    for (int i = 0; i < num_threads; i++) {
+        pthread_join(threads[i], NULL);
+        counter += args[i].counter;
+    }
 
-    return 0;
+    return counter;
 }
 
 void* Graph::count_clicks_divide_parallel_entry(void *args) {

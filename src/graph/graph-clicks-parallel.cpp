@@ -23,6 +23,7 @@ void* Graph::count_clicks_parallel_entry(void *args) {
     return NULL;
 }
 
+// 2nd Algorithm
 int Graph::count_clicks_parallel(int k, int num_threads) {
     vector<vector<int>> clicks(num_vertices, vector<int>(1));
     int counter = 0;

@@ -9,16 +9,24 @@ int Graph::count_clicks(count_clicks_args args) {
     int k = args.k;
 
     if (args.is_divided) {
-        clicks = &args.shared_c->clicks;
+        clicks = &args.shared_c[args.thread_id].clicks;
     } else {
         clicks = &args.clicks;
     }
 
     while (clicks->size()) {
         vector<vector<int>> new_clicks;
+        vector<int> click;
 
-        vector<int> click = clicks->back();
-        clicks->pop_back();
+        if (args.is_divided) {
+            mtx.lock();
+            click = clicks->back();
+            clicks->pop_back();
+            mtx.unlock();
+        } else {
+            click = clicks->back();
+            clicks->pop_back();
+        }
 
         vector<int> already_vertices;
 
@@ -53,7 +61,7 @@ int Graph::count_clicks(count_clicks_args args) {
         if (args.is_divided && new_clicks.size() > 0) {
             mtx.lock();
             for (int i = 0; i < new_clicks.size(); i++) {
-                args.shared_c->clicks.push_back(new_clicks[i]);
+                clicks->push_back(new_clicks[i]);
             }
             mtx.unlock();
         } else if (new_clicks.size() > 0) {
@@ -62,14 +70,30 @@ int Graph::count_clicks(count_clicks_args args) {
             }
         }
 
-        if (clicks->size() == 0) {
-            // TODO: Implement a way to take other clicks from the shared_clicks
+        if (args.is_divided && clicks->size() == 0) {
+            int num_threads = sizeof(args.shared_c) / sizeof(args.shared_c[0]);
+            int max = 0;
+            int thread_id;
+
+            mtx.lock();
+            for (int i = 0; i < num_threads; i++) {
+                if (args.shared_c[i].clicks.size() > max) {
+                    max = args.shared_c[i].clicks.size();
+                    thread_id = i;
+                }
+            }
+            for (int i = 0; i < max / 2; i++) {
+                clicks->push_back(args.shared_c[thread_id].clicks.back());
+                args.shared_c[thread_id].clicks.pop_back();
+            }
+            mtx.unlock();
         }
     }
 
     return counter;
 }
 
+// 1st Algorithm
 int Graph::count_clicks_serial(int k) {
     vector<vector<int>> clicks(num_vertices, vector<int>(1));
     
