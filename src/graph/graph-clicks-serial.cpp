@@ -50,13 +50,13 @@ int Graph::count_clicks(count_clicks_args args) {
             }
         }
 
-        if (args.is_divided) {
+        if (args.is_divided && new_clicks.size() > 0) {
             mtx.lock();
             for (int i = 0; i < new_clicks.size(); i++) {
                 args.shared_c->clicks.push_back(new_clicks[i]);
             }
             mtx.unlock();
-        } else {
+        } else if (new_clicks.size() > 0) {
             for (int i = 0; i < new_clicks.size(); i++) {
                 clicks->push_back(new_clicks[i]);
             }
@@ -80,6 +80,7 @@ int Graph::count_clicks_serial(int k) {
     }
 
     count_clicks_args clicks_args = {
+        -1,
         clicks,
         new shared_clicks {
             -1,

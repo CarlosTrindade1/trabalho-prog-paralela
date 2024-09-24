@@ -28,25 +28,27 @@ class Graph {
             Edge* edges;
         };
 
-        struct thread_args {
-            Graph *graph;
-            vector<vector<int>> clicks;
-            int k;
-            int counter;
-        };
-
         struct shared_clicks {
             int thread_id;
             vector<vector<int>> clicks;
         };
 
+        struct thread_args {
+            int thread_id;
+            Graph *graph;
+            vector<vector<int>> clicks;
+            shared_clicks *shared_c;
+            int k;
+            int counter;
+        };
+
         struct count_clicks_args {
+            int thread_id;
             vector<vector<int>> clicks;
             shared_clicks *shared_c;
             bool is_divided;
             int k;
         };
-
 
         int num_vertices;
         Vertex* vertices;

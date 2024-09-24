@@ -4,6 +4,7 @@ void* Graph::count_clicks_parallel_entry(void *args) {
     thread_args *thread_args = static_cast<struct thread_args *>(args);
 
     count_clicks_args args_count_clicks = {
+        thread_args->thread_id,
         thread_args->clicks,
         new shared_clicks {
             -1,
@@ -47,6 +48,7 @@ int Graph::count_clicks_parallel(int k, int num_threads) {
 
         vector<vector<int>> clicks_thread = vector<vector<int>>(clicks.begin() + start, clicks.begin() + end);
 
+        args[i].thread_id = i;
         args[i].clicks = clicks_thread;
         args[i].k = k;
         args[i].counter = 0;
