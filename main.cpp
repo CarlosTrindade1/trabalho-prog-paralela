@@ -7,8 +7,7 @@ int main(int argc, char* argv[]) {
     int size_of_click = atoi(argv[2]);
 
     Graph *graph = new Graph(file_name_graph);
-
-    cout << graph->count_clicks_divide_parallel(size_of_click, 4) << endl;
+    cout << graph->count_clicks_divide_parallel(size_of_click, 16) << endl;
 
     delete graph;
 

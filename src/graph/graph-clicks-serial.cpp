@@ -71,9 +71,10 @@ int Graph::count_clicks(count_clicks_args args) {
         }
 
         if (args.is_divided && clicks->size() == 0) {
-            int num_threads = sizeof(args.shared_c) / sizeof(args.shared_c[0]);
+            int num_threads = sizeof(args.shared_c[0]) / sizeof(args.shared_c);
+
             int max = 0;
-            int thread_id;
+            int thread_id = 0;
 
             mtx.lock();
             for (int i = 0; i < num_threads; i++) {
@@ -82,10 +83,10 @@ int Graph::count_clicks(count_clicks_args args) {
                     thread_id = i;
                 }
             }
-            for (int i = 0; i < max / 2; i++) {
-                clicks->push_back(args.shared_c[thread_id].clicks.back());
-                args.shared_c[thread_id].clicks.pop_back();
-            }
+            
+            clicks->push_back(args.shared_c[thread_id].clicks.back());
+            args.shared_c[thread_id].clicks.pop_back();
+            
             mtx.unlock();
         }
     }
