@@ -15,7 +15,7 @@ class Graph {
         ~Graph();
         int count_clicks_serial(int k);
         int count_clicks_parallel(int k, int num_threads);
-        int count_clicks_divide_parallel(int k, int num_threads);
+        int count_clicks_divide_parallel(int k, int num_threads, int r);
         void print();
 
     private:
@@ -43,6 +43,7 @@ class Graph {
             vector<vector<int>> clicks;
             shared_clicks *shared_c;
             int k;
+            int r;
             int counter;
         };
 
@@ -53,6 +54,7 @@ class Graph {
             shared_clicks *shared_c;
             bool is_divided;
             int k;
+            int r;
         };
 
         int num_vertices;

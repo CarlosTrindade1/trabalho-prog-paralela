@@ -10,7 +10,7 @@ void print_clicks(vector<vector<int>> clicks) {
 }
 
 // 3rd Algorithm
-int Graph::count_clicks_divide_parallel(int k, int num_threads) {
+int Graph::count_clicks_divide_parallel(int k, int num_threads, int r) {
     vector<vector<int>> clicks(num_vertices, vector<int>(1));
     int counter = 0;
 
@@ -31,8 +31,6 @@ int Graph::count_clicks_divide_parallel(int k, int num_threads) {
         int end = (i + 1) * vertices_per_thread;
 
         if (end > num_vertices)
-
-
             end = num_vertices;
 
         shared_c[i].thread_id = i;
@@ -49,6 +47,7 @@ int Graph::count_clicks_divide_parallel(int k, int num_threads) {
         args[i].k = k;
         args[i].counter = counter;
         args[i].num_threads = num_threads;
+        args[i].r = r;
         
         pthread_create(&threads[i], NULL, count_clicks_divide_parallel_entry, (void *) &args[i]);
     }
@@ -70,7 +69,8 @@ void* Graph::count_clicks_divide_parallel_entry(void *args) {
         thread_args->clicks,
         thread_args->shared_c,
         true,
-        thread_args->k
+        thread_args->k,
+        thread_args->r,
     };
 
     int counter = thread_args->graph->count_clicks(args_count_clicks);

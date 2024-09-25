@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
         break;
 
         case 2:
-            cout << graph->count_clicks_divide_parallel(size_of_click, 8) << endl;
+            cout << graph->count_clicks_divide_parallel(size_of_click, 8, r) << endl;
         break;
 
         default:
