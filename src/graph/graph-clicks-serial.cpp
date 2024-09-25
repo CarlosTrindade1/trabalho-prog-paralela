@@ -1,9 +1,7 @@
 #include <graph.h>
-#include <mutex>
 
 int Graph::count_clicks(count_clicks_args args) {
     int counter = 0;
-    mutex mtx;
 
     vector<vector<int>> *clicks;
     int k = args.k;
@@ -19,10 +17,10 @@ int Graph::count_clicks(count_clicks_args args) {
         vector<int> click;
 
         if (args.is_divided) {
-            mtx.lock();
+            pthread_mutex_lock(&mtx);
             click = clicks->back();
             clicks->pop_back();
-            mtx.unlock();
+            pthread_mutex_unlock(&mtx);
         } else {
             click = clicks->back();
             clicks->pop_back();
@@ -59,11 +57,11 @@ int Graph::count_clicks(count_clicks_args args) {
         }
 
         if (args.is_divided && new_clicks.size() > 0) {
-            mtx.lock();
+            pthread_mutex_lock(&mtx);
             for (int i = 0; i < new_clicks.size(); i++) {
                 clicks->push_back(new_clicks[i]);
             }
-            mtx.unlock();
+            pthread_mutex_unlock(&mtx);
         } else if (new_clicks.size() > 0) {
             for (int i = 0; i < new_clicks.size(); i++) {
                 clicks->push_back(new_clicks[i]);
@@ -71,23 +69,24 @@ int Graph::count_clicks(count_clicks_args args) {
         }
 
         if (args.is_divided && clicks->size() == 0) {
-            int num_threads = sizeof(args.shared_c[0]) / sizeof(args.shared_c);
-
             int max = 0;
             int thread_id = 0;
 
-            mtx.lock();
-            for (int i = 0; i < num_threads; i++) {
+            pthread_mutex_lock(&mtx);
+            for (int i = 0; i < args.num_threads; i++) {
                 if (args.shared_c[i].clicks.size() > max) {
                     max = args.shared_c[i].clicks.size();
                     thread_id = i;
                 }
             }
-            
-            clicks->push_back(args.shared_c[thread_id].clicks.back());
-            args.shared_c[thread_id].clicks.pop_back();
-            
-            mtx.unlock();
+
+            if (max > 0) {
+                for (int i = 0; i < max / 2; i++) {
+                    clicks->push_back(args.shared_c[thread_id].clicks.back());
+                    args.shared_c[thread_id].clicks.pop_back();
+                }
+            }
+            pthread_mutex_unlock(&mtx);
         }
     }
 
@@ -106,6 +105,7 @@ int Graph::count_clicks_serial(int k) {
 
     count_clicks_args clicks_args = {
         -1,
+        0,
         clicks,
         new shared_clicks {
             -1,

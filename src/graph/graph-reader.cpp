@@ -75,6 +75,7 @@ void Graph::read_graph(char* file_name_graph, map<int, int> new_ids) {
 }
 
 Graph::Graph(char *file_name) {
+    pthread_mutex_init(&mtx, NULL);
     map<int, int> new_ids = rename_vertices(file_name);
 
     if (new_ids.empty()) {

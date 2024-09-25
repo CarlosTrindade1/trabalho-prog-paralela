@@ -48,6 +48,7 @@ int Graph::count_clicks_divide_parallel(int k, int num_threads) {
         args[i].shared_c = shared_c;
         args[i].k = k;
         args[i].counter = counter;
+        args[i].num_threads = num_threads;
         
         pthread_create(&threads[i], NULL, count_clicks_divide_parallel_entry, (void *) &args[i]);
     }
@@ -65,6 +66,7 @@ void* Graph::count_clicks_divide_parallel_entry(void *args) {
 
     count_clicks_args args_count_clicks = {
         thread_args->thread_id,
+        thread_args->num_threads,
         thread_args->clicks,
         thread_args->shared_c,
         true,

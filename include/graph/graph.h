@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <math.h>
+#include <pthread.h>
 
 using namespace std;
 
@@ -18,6 +19,8 @@ class Graph {
         void print();
 
     private:
+        pthread_mutex_t mtx;
+
         struct Edge {
             int id;
             Edge* next;
@@ -35,6 +38,7 @@ class Graph {
 
         struct thread_args {
             int thread_id;
+            int num_threads;
             Graph *graph;
             vector<vector<int>> clicks;
             shared_clicks *shared_c;
@@ -44,6 +48,7 @@ class Graph {
 
         struct count_clicks_args {
             int thread_id;
+            int num_threads;
             vector<vector<int>> clicks;
             shared_clicks *shared_c;
             bool is_divided;

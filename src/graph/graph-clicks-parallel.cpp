@@ -5,6 +5,7 @@ void* Graph::count_clicks_parallel_entry(void *args) {
 
     count_clicks_args args_count_clicks = {
         thread_args->thread_id,
+        thread_args->num_threads,
         thread_args->clicks,
         new shared_clicks {
             -1,
@@ -54,6 +55,7 @@ int Graph::count_clicks_parallel(int k, int num_threads) {
         args[i].k = k;
         args[i].counter = 0;
         args[i].graph = this;
+        args[i].num_threads = num_threads;
 
         pthread_create(&threads[i], NULL, count_clicks_parallel_entry, (void *) &args[i]);
     }
