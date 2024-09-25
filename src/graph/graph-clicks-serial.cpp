@@ -81,7 +81,9 @@ int Graph::count_clicks(count_clicks_args args) {
             }
 
             if (max > 0) {
-                for (int i = 0; i < max / 2; i++) {
+                int length = args.r > max ? max - 1 : args.r;
+
+                for (int i = 0; i < length; i++) {
                     clicks->push_back(args.shared_c[thread_id].clicks.back());
                     args.shared_c[thread_id].clicks.pop_back();
                 }
