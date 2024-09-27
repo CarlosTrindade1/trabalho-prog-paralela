@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
     }
 
     printf("Execution time of the %d algorithm: ", algorithm);
-    cout << chrono::duration_cast<chrono::milliseconds>(end - start).count() << " ms" << endl;
+    cout << chrono::duration_cast<chrono::duration<double>>(end - start).count() << " s" << endl;
 
     delete graph;
 
