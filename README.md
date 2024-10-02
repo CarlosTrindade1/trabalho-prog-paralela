@@ -31,7 +31,7 @@ Após a compilação, você pode executar o programa usando o seguinte comando:
 ### Parâmetros
 
 - `<DATASET>`: O caminho para o arquivo de dataset que será utilizado.
-- `<QUANTIDADE_DE_CLICKS [k]>`: O número de cliques (em milhares) que o programa deve processar.
+- `<QUANTIDADE_DE_CLICKS [k]>`: O número de cliques que o programa deve processar.
 - `<ALGORITMO>`: O algoritmo que você deseja usar para o processamento, onde:
   - `0`: Sequencial
   - `1`: Paralelo
