@@ -1,5 +1,6 @@
 #include <graph.h>
 #include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -28,6 +29,8 @@ int main(int argc, char* argv[]) {
 
     chrono::high_resolution_clock::time_point start, end;
 
+    int num_of_threads = std::thread::hardware_concurrency();
+
     switch (algorithm) {
         case 0:
             start = chrono::high_resolution_clock::now();
@@ -37,7 +40,7 @@ int main(int argc, char* argv[]) {
 
         case 1:
             start = chrono::high_resolution_clock::now();
-            cout << graph->count_clicks_parallel(size_of_click, 4) << endl;
+            cout << graph->count_clicks_parallel(size_of_click, num_of_threads) << endl;
             end = chrono::high_resolution_clock::now();
         break;
 
@@ -50,7 +53,7 @@ int main(int argc, char* argv[]) {
             r = atoi(argv[4]);
 
             start = chrono::high_resolution_clock::now();
-            cout << graph->count_clicks_divide_parallel(size_of_click, 4, r) << endl;
+            cout << graph->count_clicks_divide_parallel(size_of_click, num_of_threads, r) << endl;
             end = chrono::high_resolution_clock::now();
         break;
 

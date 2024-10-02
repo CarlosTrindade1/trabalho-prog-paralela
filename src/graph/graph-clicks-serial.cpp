@@ -80,7 +80,7 @@ int Graph::count_clicks(count_clicks_args args) {
                 }
             }
 
-            if (max > 0) {
+            if (max > 100) {
                 int length = args.r > max ? max - 1 : args.r;
 
                 for (int i = 0; i < length; i++) {
