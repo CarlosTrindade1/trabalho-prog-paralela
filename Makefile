@@ -13,7 +13,7 @@ SOURCE_DIR = src
 
 # Source files
 SOURCE_FILES = $(wildcard $(SOURCE_DIR)/**/*.cpp) main.cpp
-OUTPUT = main
+OUTPUT = counter
 
 
 all: compile
@@ -22,4 +22,4 @@ compile:
 	${CC} ${INCLUDE_FLAGS} ${SOURCE_FILES} -o ${OUTPUT}
 
 run:
-	./main ./datasets/citeseer.edgelist 3 0 5
+	./counter ./datasets/citeseer.edgelist 3 0 5
